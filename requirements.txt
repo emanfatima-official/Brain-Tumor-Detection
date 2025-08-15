@@ -1,7 +1,7 @@
 streamlit
-tensorflow
 numpy
 pandas
-matplotlib
+tensorflow
 Pillow
-cv2
+altair
+
