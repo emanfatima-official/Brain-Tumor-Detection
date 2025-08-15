@@ -4,3 +4,6 @@ The model was trained on the **Brain Tumor MRI Dataset** available on Kaggle.
 You can download it here:  
 🔗 [Brain Tumor MRI Dataset – Kaggle](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
 To run the app, first clone this repository, then install the required dependencies with `pip install -r requirements.txt`, and start the application using `streamlit run app.py`. This project is implemented in Python using TensorFlow/Keras, NumPy, Pandas, Matplotlib, Altair, and Pillow, and is licensed under the MIT License.
+
+The training code and dataset are not included in this repository.  
+The app uses a pre-trained model (`brain_tumor_classifier.keras`) to make predictions.
