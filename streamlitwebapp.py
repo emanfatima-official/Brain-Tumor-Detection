@@ -20,6 +20,7 @@ st.markdown("""
     font-weight:bold;
     color:#F5F5DC;
     text-align:center;
+    line-height: 1.2
 }
 .prediction {
     font-size:24px;
@@ -34,18 +35,6 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
-st.markdown(
-    """
-    <style>
-    h1 {
-        font-size: 28px !important;   
-        line-height: 1.2 !important;  
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown("<h1 style='text-align: center;'>Brain Tumor Detection</h1>", unsafe_allow_html=True)
 
 st.markdown("<div class='title'>Brain Tumor Detection</div>", unsafe_allow_html=True)
 st.write("")
