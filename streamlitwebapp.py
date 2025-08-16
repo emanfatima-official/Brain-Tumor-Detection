@@ -124,30 +124,4 @@ if uploaded_file is not None:
             ).properties(width=500, height=300)
             st.altair_chart(chart, use_container_width=True)
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-
-    if not is_valid_mri(image):
-        st.error("❌ Invalid image! Please upload a valid brain MRI scan.")
-    else:
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            st.image(image, caption="🖼 Uploaded Image", use_container_width=True)
-
-        with col2:
-            processed = preprocess_image(uploaded_file)
-            if model.input_shape[-1] == 3 and processed.shape[-1] == 1:
-                processed = np.repeat(processed, 3, axis=-1)
-
-            with st.spinner("🔍 Analyzing MRI..."):
-                preds = model.predict(processed)
-
-            probs = preds[0]
-            top_idx = int(np.argmax(probs))
-            top_label = class_labels[top_idx]
-            top_prob = float(probs[top_idx])
-
-            st.markdown(f"<div class='prediction'>Prediction: {top_label} ({top_prob*100:.2f}%)</div>", unsafe_allow_html=True)
-
-
 st.markdown("<div class='footer'>⚡ Powered by TensorFlow & Streamlit | UI Enhanced by Eman Fatima</div>", unsafe_allow_html=True)
