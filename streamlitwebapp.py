@@ -20,7 +20,7 @@ st.markdown("""
     font-weight:bold;
     color:#F5F5DC;
     text-align:center;
-    line-height: 1.2
+    line-height: 1;
 }
 .prediction {
     font-size:24px;
