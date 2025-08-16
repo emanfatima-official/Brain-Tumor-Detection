@@ -18,7 +18,7 @@ st.markdown("""
 .title {
     font-size:40px;
     font-weight:bold;
-    color:#3ecc71
+    color:#3ecc71;
     text-align:center;
     line-height: 1;
 }
