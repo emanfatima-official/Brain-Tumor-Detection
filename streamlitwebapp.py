@@ -18,7 +18,7 @@ st.markdown("""
 .title {
     font-size:40px;
     font-weight:bold;
-    color:#3ecc71;
+    color:#3a6ea5;
     text-align:center;
     line-height: 1;
 }
@@ -31,7 +31,7 @@ st.markdown("""
 .footer {
     font-size:14px;
     text-align:center;
-    color:#3ecc71;
+    color:#3a6ea5;
 }
 </style>
 """, unsafe_allow_html=True)
