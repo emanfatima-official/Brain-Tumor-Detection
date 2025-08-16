@@ -62,7 +62,6 @@ IMG_SIZE = 64
 def load_my_model(path):
     return load_model(path)
 
-
 model = load_my_model(MODEL_PATH)
 
 def load_class_labels(json_path=CLASS_INDICES_PATH):
@@ -77,7 +76,10 @@ def load_class_labels(json_path=CLASS_INDICES_PATH):
 class_labels = load_class_labels()
 
 def preprocess_image(image_file, img_size=IMG_SIZE):
-    img = Image.open(image_file).convert('L')
+    try:
+        img = Image.open(image_file).convert('L')
+    except Exception:
+        return None
     img = img.resize((img_size, img_size))
     img_array = np.array(img, dtype=np.float32) / 255.0
     img_array = np.expand_dims(img_array, axis=-1)  
@@ -87,35 +89,39 @@ def preprocess_image(image_file, img_size=IMG_SIZE):
 uploaded_file = st.file_uploader("📤 Upload MRI Image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    col1, col2 = st.columns([1, 2])
+    processed = preprocess_image(uploaded_file)
 
-    with col1:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="🖼 Uploaded Image", use_container_width=True)
+    if processed is None:
+        st.error("❌ Invalid image format. Please upload a valid MRI image.")
+    else:
+        col1, col2 = st.columns([1, 2])
 
-    with col2:
-        processed = preprocess_image(uploaded_file)
+        with col1:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="🖼 Uploaded Image", use_container_width=True)
 
-        if model.input_shape[-1] == 3 and processed.shape[-1] == 1:
-            processed = np.repeat(processed, 3, axis=-1)
+        with col2:
+            if model.input_shape[-1] == 3 and processed.shape[-1] == 1:
+                processed = np.repeat(processed, 3, axis=-1)
 
-        with st.spinner("🔍 Analyzing MRI..."):
-            preds = model.predict(processed)
-        
-        probs = preds[0]
-        top_idx = int(np.argmax(probs))
-        top_label = class_labels[top_idx] if top_idx < len(class_labels) else f"Class {top_idx}"
-        top_prob = float(probs[top_idx])
+            with st.spinner("🔍 Analyzing MRI..."):
+                preds = model.predict(processed)
+            
+            probs = preds[0]
+            top_idx = int(np.argmax(probs))
+            top_label = class_labels[top_idx] if top_idx < len(class_labels) else f"Class {top_idx}"
+            top_prob = float(probs[top_idx])
 
-        st.markdown(f"<div class='prediction'>Prediction: {top_label} ({top_prob*100:.2f}%)</div>", unsafe_allow_html=True)
-        
-        df = pd.DataFrame({"Class": class_labels, "Probability": probs})
-        df = df.sort_values("Probability", ascending=False)
+            st.markdown(f"<div class='prediction'>Prediction: {top_label} ({top_prob*100:.2f}%)</div>", unsafe_allow_html=True)
+            
+            df = pd.DataFrame({"Class": class_labels, "Probability": probs})
+            df = df.sort_values("Probability", ascending=False)
 
-        chart = alt.Chart(df).mark_bar().encode(
-            x=alt.X('Class', sort=None),
-            y='Probability',
-            color='Class'
-        ).properties(width=500, height=300)
-        st.altair_chart(chart, use_container_width=True)
+            chart = alt.Chart(df).mark_bar().encode(
+                x=alt.X('Class', sort=None),
+                y='Probability',
+                color='Class'
+            ).properties(width=500, height=300)
+            st.altair_chart(chart, use_container_width=True)
+
 st.markdown("<div class='footer'>⚡ Powered by TensorFlow & Streamlit | UI Enhanced by Eman Fatima</div>", unsafe_allow_html=True)
