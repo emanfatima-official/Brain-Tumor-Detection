@@ -71,7 +71,7 @@ def load_class_labels(json_path=CLASS_INDICES_PATH):
         idx_to_class = {int(v): k for k, v in class_indices.items()}
         labels = [idx_to_class[i] for i in range(len(idx_to_class))]
         return labels
-    return ['glioma', 'meningioma', 'pituitary', 'no_tumor']
+    return ['glioma', 'meningioma', 'no_tumor', 'pituitary']
 
 class_labels = load_class_labels()
 
