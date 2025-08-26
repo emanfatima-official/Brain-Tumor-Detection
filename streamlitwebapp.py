@@ -7,7 +7,6 @@ import json
 import io
 import altair as alt
 import os
-import cv2
 
 st.set_page_config(
     page_title="Brain Tumor Detection",
