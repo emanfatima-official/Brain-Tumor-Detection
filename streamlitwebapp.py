@@ -7,6 +7,7 @@ import json
 import io
 import altair as alt
 import os
+import cv2
 
 st.set_page_config(
     page_title="Brain Tumor Detection",
@@ -49,6 +50,8 @@ st.sidebar.info(
     - Meningioma
     - Pituitary
     - No Tumor
+    
+    **Note**: Only grayscale MRI images are accepted.
     """
 )
 st.sidebar.markdown("---")
@@ -75,30 +78,63 @@ def load_class_labels(json_path=CLASS_INDICES_PATH):
 
 class_labels = load_class_labels()
 
+def is_grayscale(image_array):
+    """
+    Check if image is grayscale (not RGB/color)
+    Returns True for grayscale images, False for color images
+    """
+    if len(image_array.shape) == 2:
+        return True  
+    
+    if len(image_array.shape) == 3:
+        if image_array.shape[2] == 1:
+            return True
+        elif np.all(image_array[:,:,0] == image_array[:,:,1]) and np.all(image_array[:,:,0] == image_array[:,:,2]):
+            return True  
+    
+    return False
+
 def preprocess_image(image_file, img_size=IMG_SIZE):
     try:
-        img = Image.open(image_file).convert('L')
-    except Exception:
-        return None
+
+        img = Image.open(image_file)
+        img_array = np.array(img)
+        
+        if not is_grayscale(img_array):
+            return None, "color"
+
+        img = img.convert('L')
+        
+    except Exception as e:
+        return None, "invalid"
+    
     img = img.resize((img_size, img_size))
     img_array = np.array(img, dtype=np.float32) / 255.0
     img_array = np.expand_dims(img_array, axis=-1)  
     img_array = np.expand_dims(img_array, axis=0)   
-    return img_array
+    return img_array, "valid"
     
 uploaded_file = st.file_uploader("📤 Upload MRI Image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    processed = preprocess_image(uploaded_file)
+    processed, status = preprocess_image(uploaded_file)
 
-    if processed is None:
+    if status == "color":
+        st.error("❌ Invalid image! Please upload a grayscale MRI image.")
+        st.info("MRI images are typically black and white. Color/RGB images are not accepted.")
+        s
+        image = Image.open(uploaded_file)
+        st.image(image, caption="🖼 Uploaded Color Image (Not Accepted)")
+        
+    elif status == "invalid":
         st.error("❌ Invalid image format. Please upload a valid MRI image.")
+        
     else:
         col1, col2 = st.columns([1, 2])
 
         with col1:
             image = Image.open(uploaded_file)
-            st.image(image, caption="🖼 Uploaded Image", use_container_width=True)
+            st.image(image, caption="🖼 Uploaded MRI Image")
 
         with col2:
             if model.input_shape[-1] == 3 and processed.shape[-1] == 1:
@@ -122,6 +158,6 @@ if uploaded_file is not None:
                 y='Probability',
                 color='Class'
             ).properties(width=500, height=300)
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart)
 
 st.markdown("<div class='footer'>⚡ Powered by TensorFlow & Streamlit | UI Enhanced by Eman Fatima</div>", unsafe_allow_html=True)
