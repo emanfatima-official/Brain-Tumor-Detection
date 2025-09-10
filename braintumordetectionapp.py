@@ -37,7 +37,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<div class='title'>Brain Tumor Detection</div>", unsafe_allow_html=True)
-st.write("")
+st.write("Upload an MRI image and this app will predict the type of brain tumor using a deep learning model. The prediction classes include glioma, meniningioma, pituitary and no tumor (healthy brain")
 
 st.sidebar.header("📌 About")
 st.sidebar.info(
