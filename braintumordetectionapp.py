@@ -21,6 +21,7 @@ st.markdown("""
     color:#ADD8E6;
     text-align:center;
     line-height: 1;
+    padding: 20px;
 }
 .prediction {
     font-size:24px;
