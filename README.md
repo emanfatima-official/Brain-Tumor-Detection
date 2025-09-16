@@ -1,4 +1,4 @@
-# Brain Tumor Detection using Deep Learning & Streamlit
+# Brain Tumor Detection using Deep Learning
 This deep learning-based brain tumor detection model achieves 95% accuracy in identifying tumor types from MRI scans. It features an interactive and user-friendly interface built with Streamlit for easy accessibility. Designed for accuracy and usability, it assists in quick and reliable medical image analysis.
 The model was trained on the **Brain Tumor MRI Dataset** available on Kaggle.  
 You can download it here:  
