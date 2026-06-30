@@ -159,4 +159,4 @@ if uploaded_file is not None:
             ).properties(width=500, height=300)
             st.altair_chart(chart)
 
-st.markdown("<div class='footer'>⚡ Powered by TensorFlow & Streamlit | UI Enhanced by Eman Fatima</div>", unsafe_allow_html=True)
+st.markdown("<div class='footer'>⚡ Powered by TensorFlow & Streamlit | Developed by Eman Fatima</div>", unsafe_allow_html=True)
